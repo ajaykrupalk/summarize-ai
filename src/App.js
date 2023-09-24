@@ -1,23 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import InputPanel from './components/InputPanel';
+import OutputPanel from './components/OutputPanel';
+import PageHeader from './components/PageHeader';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='w-screen font-sans'>
+      <PageHeader/>
+      <div className='flex flex-wrap p-5 mt-1 gap-y-10 lg:gap-x-20 xl:gap-x-40'>
+        <div className='w-screen md:w-96 lg:ml-5 xl:ml-40'>
+          <InputPanel />
+        </div>
+        <div className='w-screen lg:w-[30em] xl:w-[40em]'>
+          <OutputPanel />
+        </div>
+      </div>     
     </div>
   );
 }
