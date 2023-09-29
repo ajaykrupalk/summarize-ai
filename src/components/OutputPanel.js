@@ -5,14 +5,18 @@ import { useEffect, useState } from "react";
 function OutputPanel({ bookName }) {
     const [bookSummary, setBookSummary] = useState('')
     useEffect(() => {
-        setBookSummary('')
+        if(bookName === ''){
+            setBookSummary('');
+            return; 
+        }
+        
         const fetchData = async () => {
             const response = await fetch(
                 "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-v0.1",
                 {
-                    headers: { 
+                    headers: {
                         Authorization: `Bearer ${process.env.REACT_APP_HF_API_KEY}`,
-                        "Content-Type": "application/json", 
+                        "Content-Type": "application/json",
                     },
                     method: "POST",
                     body: JSON.stringify({
@@ -25,6 +29,9 @@ function OutputPanel({ bookName }) {
                             "repetition_penalty": 10.0,
                             "do_sample": true
                         },
+                        "options": {
+                            "use_cache": false
+                        }
                     }),
                 }
             );

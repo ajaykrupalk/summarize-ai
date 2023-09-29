@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
