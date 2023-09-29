@@ -14,11 +14,11 @@ function App() {
   return (
     <div className='w-screen font-sans'>
       <PageHeader/>
-      <div className='flex flex-wrap p-5 mt-1 gap-y-10 lg:gap-x-20 xl:gap-x-40'>
-        <div className='w-screen md:w-96 lg:ml-5 xl:ml-40 lg:flex lg:items-center'>
+      <div className='flex flex-wrap p-5 mt-1 gap-y-10 md:gap-x-10 lg:gap-x-20 xl:gap-x-30'>
+        <div className='w-screen md:flex md:items-center md:w-[30vw] md:ml-[5vw]'>
           <InputPanel onInputValue={handleInputValue}/>
         </div>
-        <div className='w-screen lg:w-[30em] xl:w-[40em]'>
+        <div className='w-screen md:w-[50vw]'>
           <OutputPanel bookName={bookName}/>
         </div>
       </div>     
