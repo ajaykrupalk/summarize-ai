@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 
 function OutputPanel({ bookName }) {
     const [bookSummary, setBookSummary] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
-        if(bookName === ''){
+        if (bookName === '') {
             setBookSummary('');
-            return; 
+            return;
         }
-        
+
+        setIsLoading(true)
         const fetchData = async () => {
             const response = await fetch(
                 "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-v0.1",
@@ -22,9 +25,8 @@ function OutputPanel({ bookName }) {
                     body: JSON.stringify({
                         "inputs": `Summarize the book '${bookName}'`,
                         "parameters": {
-                            "return_full_text": true,
-                            "max_new_tokens": 250,
                             "return_full_text": false,
+                            "max_new_tokens": 250,
                             "max_time": 120,
                             "repetition_penalty": 10.0,
                             "do_sample": true
@@ -35,14 +37,17 @@ function OutputPanel({ bookName }) {
                     }),
                 }
             );
+
             const result = await response.json();
-            console.log(result);
-            if(result[0].generated_text.length > 0) {
+            setIsLoading(false);
+            
+            if (result[0].generated_text.length > 0) {
                 console.log('inside')
                 setBookSummary(result[0].generated_text);
                 return;
             }
-            setBookSummary(' ')
+
+            setBookSummary('')
             return;
         };
 
@@ -50,9 +55,17 @@ function OutputPanel({ bookName }) {
     }, [bookName])
 
     return (
-        <div className="p-3 h-[35em] w-full bg-slate-100 rounded-md overflow-auto border-2 border-slate-200">
-            <p className="leading-7">{bookSummary}</p>
-            <p className="mt-3 text-red-500 font-medium">*Note: The text is AI Generated</p>
+        <div className="p-3 h-[35em] w-full bg-slate-100 rounded-md overflow-y-auto border-2 border-slate-200">
+            {
+                isLoading ? (
+                    <p className="font-medium text-gray-700">Fetching Data..</p>
+                ) : (
+                    <>
+                        <p className="leading-7">{bookName} {bookSummary}</p>
+                        <p className="mt-3 text-red-500 font-medium">*Note: The text is AI Generated</p>
+                    </>
+                )
+            }
         </div>
     );
 }
