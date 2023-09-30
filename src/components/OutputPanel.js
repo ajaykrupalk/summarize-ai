@@ -24,7 +24,10 @@ function OutputPanel({ bookName }) {
                 inputs: `Summarize the book "${bookName}".`,
                 parameters: {
                     max_new_tokens: 250,
-                    return_full_text: false
+                    return_full_text: false,
+                },
+                options: {
+                    use_cache: true
                 }
             })
 
