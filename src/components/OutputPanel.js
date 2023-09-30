@@ -1,55 +1,46 @@
 import { HuggingFaceStream, StreamingTextResponse } from "ai";
+import { HfInference } from "@huggingface/inference";
 import { useEffect, useState } from "react";
 
+
+const hf = new HfInference(process.env.REACT_APP_HF_API_KEY);
 
 function OutputPanel({ bookName }) {
     const [bookSummary, setBookSummary] = useState('')
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+
         if (bookName === '') {
             setBookSummary('');
             return;
         }
 
         setIsLoading(true)
-        const fetchData = async () => {
-            const response = await fetch(
-                "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-v0.1",
-                {
-                    headers: {
-                        Authorization: `Bearer ${process.env.REACT_APP_HF_API_KEY}`,
-                        "Content-Type": "application/json",
-                    },
-                    method: "POST",
-                    body: JSON.stringify({
-                        "inputs": `Summarize the book '${bookName}.'`,
-                        "parameters": {
-                            "return_full_text": false,
-                            "max_new_tokens": 250,
-                            "max_time": 120,
-                            "repetition_penalty": 10.0,
-                            "do_sample": true
-                        },
-                        "options": {
-                            "use_cache": false
-                        }
-                    }),
-                }
-            );
 
-            const result = await response.json();
+        const fetchData = async () => {
+            const response = await hf.textGeneration({
+                model: 'mistralai/Mistral-7B-v0.1',
+                inputs: `Summarize the book "${bookName}".`,
+                parameters: {
+                    max_new_tokens: 250,
+                    return_full_text: false
+                }
+            })
+
             setIsLoading(false);
-            
-            if (result[0].generated_text.length > 0) {
-                console.log('inside')
-                setBookSummary(result[0].generated_text);
+
+            console.log(response)
+
+            if(response.generated_text.length > 0){
+                console.log(response.generated_text.includes("\n"))
+                setBookSummary((response.generated_text).trim().replace(/\n/g, '<br>'))
                 return;
             }
 
-            setBookSummary('')
+            setBookSummary(' ')
             return;
-        };
+        }
 
         fetchData();
     }, [bookName])
@@ -61,7 +52,7 @@ function OutputPanel({ bookName }) {
                     <p className="font-medium text-gray-700">Fetching Data..</p>
                 ) : (
                     <>
-                        <p className="leading-7">{bookSummary}</p>
+                        <p className="leading-7" dangerouslySetInnerHTML={{ __html: bookSummary }} ></p>
                         <p className="mt-3 text-red-500 font-medium">*Note: The text is AI Generated</p>
                     </>
                 )
