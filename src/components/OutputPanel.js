@@ -23,7 +23,7 @@ function OutputPanel({ bookName }) {
                     },
                     method: "POST",
                     body: JSON.stringify({
-                        "inputs": `Summarize the book '${bookName}'`,
+                        "inputs": `Summarize the book '${bookName}.'`,
                         "parameters": {
                             "return_full_text": false,
                             "max_new_tokens": 250,
@@ -61,7 +61,7 @@ function OutputPanel({ bookName }) {
                     <p className="font-medium text-gray-700">Fetching Data..</p>
                 ) : (
                     <>
-                        <p className="leading-7">{bookName} {bookSummary}</p>
+                        <p className="leading-7">{bookSummary}</p>
                         <p className="mt-3 text-red-500 font-medium">*Note: The text is AI Generated</p>
                     </>
                 )
