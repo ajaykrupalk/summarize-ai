@@ -9,7 +9,11 @@ function InputPanel({ onInputValue }) {
 
     return (
         <div className="space-y-7 w-full">
-            <h1 className="text-2xl font-bold">Summarize a Book</h1>
+            <div>
+                <span class="items-center rounded-md bg-black px-2 py-1 text-[10px] font-medium text-white tracking-wider">BETA</span>
+                <h1 className="text-2xl font-bold">Summarize a Book</h1>
+            </div>
+            <p className="text-sm font-medium">Note: This is an AI experiment and might not produce accurate results</p>
             <div className="space-y-3">
                 <label
                     htmlFor="bookName"
